@@ -143,8 +143,8 @@ suite('Unit Tests', function () {
   suite('Objects', function () {
     // #16
     test('#property, #notProperty', function () {
-      assert.property(myCar, 'wings', "Cars don't have wings");
-      assert.notProperty(airlinePlane, 'engines', 'Planes have engines');
+      assert.notProperty(myCar, 'wings', "Cars don't have wings");
+      assert.property(airlinePlane, 'engines', 'Planes have engines');
       assert.property(myCar, 'wheels', 'Cars have wheels');
     });
     // #17
