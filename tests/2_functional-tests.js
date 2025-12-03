@@ -73,7 +73,7 @@ suite('Functional Tests', function () {
     });
   });
   });
-  #});
+  });
 
 const Browser = require('zombie');
 
@@ -125,4 +125,4 @@ suite('Functional Tests with Zombie.js', function () {
       });
     });
   });
-
+  });
