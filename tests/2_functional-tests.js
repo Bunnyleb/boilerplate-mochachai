@@ -26,10 +26,10 @@ suite('Functional Tests', function () {
       chai
         .request(server)
         .keepOpen()
-        .get('/hello?name=<your_name>')
+        .get('/hello?name=Joanna')
         .end(function (err, res) {
           assert.equal(res.status, 200);
-          assert.equal(res.text, 'hello <your_name>);
+          assert.equal(res.text, 'hello Joanna');
           done();
         });
     });
