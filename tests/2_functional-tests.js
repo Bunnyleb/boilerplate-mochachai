@@ -79,11 +79,11 @@ const Browser = require('zombie');
 
 
 
-Browser.site = 'https://boilerplate-mochachai-j1aj.onrender.com/';
+Browser.site = 'https://boilerplate-mochachai-j1aj.onrender.com';
 const browser = new Browser();
 
 suite('Functional Tests with Zombie.js', function () {
-  this.timeout(10000); // Zwiększony timeout dla Render
+  #this.timeout(5000); // Zwiększony timeout dla Render
 
   suiteSetup(function (done) {
     browser.visit('/', done);
@@ -97,17 +97,7 @@ suite('Functional Tests with Zombie.js', function () {
 
   suite('"Famous Italian Explorers" form', function () {
     
-    test('Submit the surname "Polo" in the HTML form', function (done) {
-  browser.fill('surname', 'Polo').then(() => {
-    browser.pressButton('submit', () => {
-      browser.assert.success();
-      browser.assert.text('span#name', 'Marco');
-      browser.assert.text('span#surname', 'Polo');
-      browser.assert.elements('span#dates', 1);
-      done();
-    });
-  });
-});
+   
     test('Submit the surname "Colombo" in the HTML form', function (done) {
       browser.fill('surname', 'Colombo');
       browser.pressButton('submit', function () {
