@@ -72,23 +72,23 @@ suite('Functional Tests', function () {
        done();
     });
   });
+  });
+  });
 
 const Browser = require('zombie');
-const assert = require('chai').assert; // ✅ MUST import 'assert'
+
 
 Browser.site = 'https://boilerplate-mochachai-j1aj.onrender.com/';
 const browser = new Browser();
 
 suite('Functional Tests with Zombie.js', function () {
-  this.timeout(10000); // Increased for Render wake-up
+  this.timeout(5000); // Increased for Render wake-up
 
   suiteSetup(function (done) {
     browser.visit('/', done);
   });
 
-  // --------------------------------------------------
-  // 1️⃣ Headless browser check
-  // --------------------------------------------------
+ 
   suite('Headless browser', function () {
     test('should have a working "site" property', function () {
       assert.isNotNull(browser.site);
