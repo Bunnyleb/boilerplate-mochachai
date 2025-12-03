@@ -76,47 +76,52 @@ suite('Functional Tests', function () {
   });
 
 const Browser = require('zombie');
-
+const Browser = require('zombie');
+const assert = require('chai').assert;
 
 Browser.site = 'https://boilerplate-mochachai-j1aj.onrender.com/';
 const browser = new Browser();
 
 suite('Functional Tests with Zombie.js', function () {
-  this.timeout(5000); // Increased for Render wake-up
+  this.timeout(10000); // Zwiększony timeout dla Render
 
   suiteSetup(function (done) {
     browser.visit('/', done);
   });
 
- 
   suite('Headless browser', function () {
     test('should have a working "site" property', function () {
       assert.isNotNull(browser.site);
     });
   });
 
-  // --------------------------------------------------
-  // 2️⃣ "Famous Italian Explorers" form tests
-  // --------------------------------------------------
   suite('"Famous Italian Explorers" form', function () {
-    // #5 – Test surname "Colombo"
+    // #5 – Test dla "Colombo"
     test('Submit the surname "Colombo" in the HTML form', function (done) {
-       browser.fill('surname', 'Colombo').then(() => {
-      browser.pressButton('submit', function(err) {
-        if (err) return done(err);
-    
-    browser.assert.success();
-    // assert that the text inside the element 'span#name' is 'Cristoforo'
-    browser.assert.text('span#name', 'Cristoforo');
-    // assert that the text inside the element 'span#surname' is 'Colombo'
-    browser.assert.text('span#surname', 'Colombo');
-    // assert that the element(s) 'span#dates' exist and their count is 1
-    browser.assert.elements('span#dates', 1);
+      browser.fill('surname', 'Colombo');
+      browser.pressButton('submit', function () {
+        // ✅ Asercje dokładnie według wymagań:
+        
+        // 1. Assert that status is OK 200
+        browser.assert.success(); // Sprawdza status 2xx (w tym 200)
+        
+        // 2. Assert that the text inside the element span#name is 'Cristoforo'
+        browser.assert.text('span#name', 'Cristoforo');
+        
+        // 3. Assert that the text inside the element span#surname is 'Colombo'
+        browser.assert.text('span#surname', 'Colombo');
+        
+        // 4. Assert that the element(s) span#dates exist and their count is 1
+        browser.assert.elements('span#dates', 1); // ✅ "elements", nie "element"
 
-    done(); // It's an async test, so we have to call 'done()''
+        done();
+      });
+    });
+
+    // #6 – Test dla "Vespucci" (jeśli potrzebny, dodaj podobnie)
+    // test('Submit the surname "Vespucci" in the HTML form', ...);
   });
 });
-
     // #6 – Test surname "Vespucci"
     test('Submit the surname "Vespucci" in the HTML form', function (done) {
       browser.fill('surname', 'Vespucci');
