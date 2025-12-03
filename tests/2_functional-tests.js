@@ -76,7 +76,7 @@ suite('Functional Tests', function () {
   });
 
 const Browser = require('zombie');
-const Browser = require('zombie');
+
 const assert = require('chai').assert;
 
 Browser.site = 'https://boilerplate-mochachai-j1aj.onrender.com/';
