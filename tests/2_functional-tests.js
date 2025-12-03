@@ -79,11 +79,11 @@ const Browser = require('zombie');
 
 
 
-Browser.site = 'http://0.0.0.0:3000';
+Browser.site = https://boilerplate-mochachai-j1aj.onrender.com;
 const browser = new Browser();
 
 suite('Functional Tests with Zombie.js', function () {
-  this.timeout(10000); // Zwiększony timeout dla Render
+  this.timeout(5000); // Zwiększony timeout dla Render
 
   suiteSetup(function (done) {
     return browser.visit('/', done);
