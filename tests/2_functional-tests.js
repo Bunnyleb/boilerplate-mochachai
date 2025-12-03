@@ -79,7 +79,7 @@ const Browser = require('zombie');
 
 
 
-Browser.site = https://boilerplate-mochachai-j1aj.onrender.com;
+Browser.site = https://boilerplate-mochachai-j1aj.onrender.com/;
 const browser = new Browser();
 
 suite('Functional Tests with Zombie.js', function () {
