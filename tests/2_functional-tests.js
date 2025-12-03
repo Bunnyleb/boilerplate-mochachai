@@ -101,8 +101,7 @@ suite('Functional Tests with Zombie.js', function () {
   suite('"Famous Italian Explorers" form', function () {
     // #5 – Test surname "Colombo"
     test('Submit the surname "Colombo" in the HTML form', function (done) {
-      browser.fill('surname', 'Colombo');
-              .pressButton('submit', function () {
+      browser.fill('surname', 'Colombo').pressButton('submit', function () {
        
         browser.assert.success();
         browser.assert.text('span#name', 'Cristoforo');
