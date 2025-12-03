@@ -76,20 +76,18 @@ suite('Functional Tests', function () {
 const Browser = require('zombie');
 const assert = require('chai').assert; // ✅ MUST import 'assert'
 
-// Set the site URL (use Render or local)
 Browser.site = 'https://boilerplate-mochachai-j1aj.onrender.com/';
 const browser = new Browser();
 
 suite('Functional Tests with Zombie.js', function () {
-  this.timeout(10000); // Increased timeout to handle Render wake-up
+  this.timeout(10000); // Increased for Render wake-up
 
-  // Navigate to home page once before all tests
   suiteSetup(function (done) {
-    browser.visit('/', done); // ✅ No 'return' needed – just pass 'done'
+    browser.visit('/', done);
   });
 
   // --------------------------------------------------
-  // 1️⃣ Verify browser configuration
+  // 1️⃣ Headless browser check
   // --------------------------------------------------
   suite('Headless browser', function () {
     test('should have a working "site" property', function () {
@@ -98,41 +96,31 @@ suite('Functional Tests with Zombie.js', function () {
   });
 
   // --------------------------------------------------
-  // 2️⃣ Test the form with BOTH surnames
+  // 2️⃣ "Famous Italian Explorers" form tests
   // --------------------------------------------------
   suite('"Famous Italian Explorers" form', function () {
-    // #5 – Test "Colombo"
+    // #5 – Test surname "Colombo"
     test('Submit the surname "Colombo" in the HTML form', function (done) {
-      // Fill the form (synchronous)
       browser.fill('surname', 'Colombo');
-
-      // Submit the form (async)
       browser.pressButton('submit', function (err) {
-        if (err) return done(err); // Handle errors
-
-        // ✅ EXACT REQUIREMENTS:
-        browser.assert.status(200);                     // Assert status is OK 200
-        browser.assert.text('span#name', 'Cristoforo'); // Text in span#name
-        browser.assert.text('span#surname', 'Colombo'); // Text in span#surname
-        browser.assert.elements('span#dates', 1);      // Exactly 1 span#dates
-
-        done(); // Test passed
+        if (err) return done(err);
+        browser.assert.status(200);
+        browser.assert.text('span#name', 'Cristoforo');
+        browser.assert.text('span#surname', 'Colombo');
+        browser.assert.elements('span#dates', 1);
+        done();
       });
     });
 
-    // #6 – Test "Vespucci"
+    // #6 – Test surname "Vespucci"
     test('Submit the surname "Vespucci" in the HTML form', function (done) {
       browser.fill('surname', 'Vespucci');
-
       browser.pressButton('submit', function (err) {
         if (err) return done(err);
-
-        // ✅ EXACT REQUIREMENTS FOR VESPUCCI:
         browser.assert.status(200);
-        browser.assert.text('span#name', 'Amerigo');    // Name for Vespucci
+        browser.assert.text('span#name', 'Amerigo');
         browser.assert.text('span#surname', 'Vespucci');
         browser.assert.elements('span#dates', 1);
-
         done();
       });
     });
