@@ -73,7 +73,7 @@ suite('Functional Tests', function () {
     });
   });
   });
-  });
+  #});
 
 const Browser = require('zombie');
 
