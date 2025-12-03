@@ -83,10 +83,10 @@ Browser.site = 'http://0.0.0.0:3000';
 const browser = new Browser();
 
 suite('Functional Tests with Zombie.js', function () {
-  this.timeout(5000); // Zwiększony timeout dla Render
+  this.timeout(10000); // Zwiększony timeout dla Render
 
   suiteSetup(function (done) {
-    browser.visit('/', done);
+    return browser.visit('/', done);
   });
 
   suite('Headless browser', function () {
