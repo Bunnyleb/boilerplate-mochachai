@@ -72,8 +72,7 @@ suite('Functional Tests', function () {
        done();
     });
   });
-});
-});
+
 
 const Browser = require('zombie');
 Browser.site = 'https://boilerplate-mochachai-j1aj.onrender.com/'; // Your URL here
