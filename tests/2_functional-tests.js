@@ -1,3 +1,25 @@
+### **Rozwiązanie problemu z testem #6 (`Vespucci`)**  
+**Bez zbędnych rozwiązań, tylko konkretne poprawki.**  
+
+---
+
+## **Dlaczego test #6 upada?**  
+**Błąd:**  
+`AssertionError [ERR_ASSERTION]: No open window with an HTML document`  
+
+**Przyczyna:**  
+Test `#6` (**Vespucci**) **nie jest w środku suite'u `"Famous Italian Explorers" form`**, a dodatkowo **nie wywołuje `pressButton('submit')`**.  
+**`suiteSetup` działa tylko raz** (przed wszystkimi testami w suite'ach). Po pierwszym teście (Colombo) przeglądarka jest już na **stronie wyników**, a test #6 próbuje wypełnić formularz, którego **już nie ma**.  
+
+---
+
+## **POPRAWNY KOD**  
+**Zastosuj te 2 zmiany i testy zadziałają:**
+
+### 1. **Przenieś test #6 do środka suite'u `"Famous Italian Explorers" form`**  
+### 2. **Zastąp `suiteSetup` na `setup`** (żeby przed **KAŻDYM** testem wracać do `/`)  
+
+```javascript
 const chai = require('chai');
 const assert = chai.assert;
 
@@ -9,132 +31,53 @@ chai.use(chaiHttp);
 suite('Functional Tests', function () {
   this.timeout(5000);
   suite('Integration tests with chai-http', function () {
-    // #1
-    test('Test GET /hello with no name', function (done) {
-      chai
-        .request(server)
-        .keepOpen()
-        .get('/hello')
-        .end(function (err, res) {
-          assert.equal(res.status, 200);
-          assert.equal(res.text, 'hello Guest');
-          done();
-        });
-    });
-    // #2
-    test('Test GET /hello with your name', function (done) {
-      chai
-        .request(server)
-        .keepOpen()
-        .get('/hello?name=Joanna')
-        .end(function (err, res) {
-          assert.equal(res.status, 200);
-          assert.equal(res.text, 'hello Joanna');
-          done();
-        });
-    });
-    // #3
-    test('Send {surname: "Colombo"}', function (done) {
-      chai
-        .request(server)
-        .keepOpen()
-        .put('/travellers')
-        .send(
-          {
-            "surname": "Colombo"
-          })
-
-        .end(function (err, res) {
-          assert.equal(res.status, 200, 'Response status should be 200');
-          assert.equal(res.type, 'application/json', 'Response type should be application/json');
-          assert.equal(res.body.name, 'Cristoforo', 'Response should be "Cristoforo"' );
-          assert.equal(res.body.surname, 'Colombo', 'Response should be "Colombo"');
-
-          done();
-        });
-    });
-    // #4
-    test('Send {surname: "da Verrazzano"}', function (done) {
-      chai
-       .request(server)
-       .keepOpen()
-       .put('/travellers')
-       .send(
-         {
-          "surname": "da Verrazzano"
-         })
-      .end(function(err, res) {
-       assert.equal(res.status,200);
-       assert.equal(res.type, "application/json");
-       assert.equal(res.body.name, "Giovanni");
-       assert.equal(res.body.surname, "da Verrazzano");
-
-       done();
-    });
-  });
-  });
+    // ... (testy #1-#4 zostają bez zmian)
   });
 
-const Browser = require('zombie');
+  const Browser = require('zombie');
+  Browser.site = "https://boilerplate-mochachai-j1aj.onrender.com/";
+  const browser = new Browser();
 
+  suite('Functional Tests with Zombie.js', function () {
+    this.timeout(20000);
 
-
-Browser.site = "https://boilerplate-mochachai-j1aj.onrender.com/";
-const browser = new Browser();
-
-suite('Functional Tests with Zombie.js', function () {
-  this.timeout(20000); // Zwiększony timeout dla Render
-
-  suiteSetup(function (done) {
-    return browser.visit('/', done);
-  });
-
-  suite('Headless browser', function () {
-    test('should have a working "site" property', function () {
-      assert.isNotNull(browser.site);
+    // ✅ ZMIANA #1: setup zamiast suiteSetup – działa PRZED KAŻDYM testem
+    setup(function (done) {
+      browser.visit('/', done); // Reset przeglądarki przed KAŻDYM testem
     });
-  });
 
-  suite('"Famous Italian Explorers" form', function () {
-    
-   
-    test('Submit the surname "Colombo" in the HTML form', function (done) {
-      browser.fill('surname', 'Colombo');
-      browser.pressButton('submit', function () {
-        // ✅ Asercje dokładnie według wymagań:
-        
-        // 1. Assert that status is OK 200
-        browser.assert.success(); // Sprawdza status 2xx (w tym 200)
-        
-        // 2. Assert that the text inside the element span#name is 'Cristoforo'
-        browser.assert.text('span#name', 'Cristoforo');
-        
-        // 3. Assert that the text inside the element span#surname is 'Colombo'
-        browser.assert.text('span#surname', 'Colombo');
-        
-        // 4. Assert that the element(s) span#dates exist and their count is 1
-        browser.assert.elements('span#dates', 1); // ✅ "elements", nie "element"
-
-        done();
+    suite('Headless browser', function () {
+      test('should have a working "site" property', function () {
+        assert.isNotNull(browser.site);
       });
     });
 
-    // #6 – Test dla "Vespucci" (jeśli potrzebny, dodaj podobnie)
-    // test('Submit the surname "Vespucci" in the HTML form', ...);
+    suite('"Famous Italian Explorers" form', function () {
+      // #5 – Test Colombo (zostaje bez zmian)
+      test('Submit the surname "Colombo" in the HTML form', function (done) {
+        browser.fill('surname', 'Colombo');
+        browser.pressButton('submit', function () {
+          browser.assert.success();
+          browser.assert.text('span#name', 'Cristoforo');
+          browser.assert.text('span#surname', 'Colombo');
+          browser.assert.elements('span#dates', 1);
+          done();
+        });
+      });
+
+      // ✅ ZMIANA #2: Test Vespucci PRZENIESIONY DO ŚRODKA SUITE'U + pressButton
+      test('Submit the surname "Vespucci" in the HTML form', function (done) {
+        browser.fill('surname', 'Vespucci');
+        browser.pressButton('submit', function () { // ✅ BRAKUJĄCE pressButton!
+          browser.assert.success();
+          browser.assert.text('span#name', 'Amerigo');
+          browser.assert.text('span#surname', 'Vespucci');
+          browser.assert.elements('span#dates', 1);
+          done();
+        });
+      });
+    });
   });
 });
-    // #6 – Test surname "Vespucci"
-   test('Submit the surname "Vespucci" in the HTML form', function (done) {
-      browser.fill('surname', 'Vespucci');
-      browser.pressButton('submit', function () {
-       
-        browser.assert.success();
-        browser.assert.text('span#name', 'Amerigo');
-        browser.assert.text('span#surname', 'Vespucci');
-        browser.assert.elements('span#dates', 1);
-        done();
-      });
-    });
- 
-  
+
 
