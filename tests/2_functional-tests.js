@@ -1,25 +1,4 @@
-### **Rozwiązanie problemu z testem #6 (`Vespucci`)**  
-**Bez zbędnych rozwiązań, tylko konkretne poprawki.**  
 
----
-
-## **Dlaczego test #6 upada?**  
-**Błąd:**  
-`AssertionError [ERR_ASSERTION]: No open window with an HTML document`  
-
-**Przyczyna:**  
-Test `#6` (**Vespucci**) **nie jest w środku suite'u `"Famous Italian Explorers" form`**, a dodatkowo **nie wywołuje `pressButton('submit')`**.  
-**`suiteSetup` działa tylko raz** (przed wszystkimi testami w suite'ach). Po pierwszym teście (Colombo) przeglądarka jest już na **stronie wyników**, a test #6 próbuje wypełnić formularz, którego **już nie ma**.  
-
----
-
-## **POPRAWNY KOD**  
-**Zastosuj te 2 zmiany i testy zadziałają:**
-
-### 1. **Przenieś test #6 do środka suite'u `"Famous Italian Explorers" form`**  
-### 2. **Zastąp `suiteSetup` na `setup`** (żeby przed **KAŻDYM** testem wracać do `/`)  
-
-```javascript
 const chai = require('chai');
 const assert = chai.assert;
 
