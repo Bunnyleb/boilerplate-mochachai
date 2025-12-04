@@ -83,7 +83,7 @@ Browser.site = "https://boilerplate-mochachai-j1aj.onrender.com/";
 const browser = new Browser();
 
 suite('Functional Tests with Zombie.js', function () {
-  this.timeout(5000); // Zwiększony timeout dla Render
+  this.timeout(20000); // Zwiększony timeout dla Render
 
   suiteSetup(function (done) {
     return browser.visit('/', done);
